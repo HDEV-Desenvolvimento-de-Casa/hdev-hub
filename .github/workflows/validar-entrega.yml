@@ -1,0 +1,91 @@
+name: "Validação POC — EstacionamentoOn"
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  validar:
+    if: contains(github.event.issue.title, '[ENTREGA]')
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Extrair link do repositório
+      id: extract
+      run: |
+        BODY="${{ github.event.issue.body }}"
+        REPO_URL=$(echo "$BODY" | grep -o 'https://github.com/[^ )]*' | head -n 1)
+
+        if [ -z "$REPO_URL" ]; then
+          echo "repo_url=" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+
+        echo "repo_url=$REPO_URL" >> $GITHUB_OUTPUT
+
+    - name: 🔍 Verificar se o repositório existe
+      if: steps.extract.outputs.repo_url != ''
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const url = "${{ steps.extract.outputs.repo_url }}";
+          const parts = url.replace("https://github.com/", "").split("/");
+          const owner = parts[0];
+          const repo = parts[1];
+          await github.repos.get({ owner, repo });
+
+    - name: 📥 Clonar o repositório para análise
+      run: |
+        git clone ${{ steps.extract.outputs.repo_url }} projeto
+
+    - name: 📄 Verificar README
+      run: |
+        if [ ! -f "projeto/README.md" ]; then
+          echo "README ausente"
+          exit 1
+        fi
+
+    - name: 🧱 Verificar referência ao SQLite
+      run: |
+        if ! grep -Rqi "sqlite" projeto; then
+          echo "SQLite não encontrado"
+          exit 1
+        fi
+
+    - name: 🖼 Verificar prints no README
+      run: |
+        if ! grep -R "png\|jpg\|gif" -i projeto/README.md; then
+          echo "Nenhuma imagem encontrada"
+          exit 1
+        fi
+
+    - name: 🎥 Verificar vídeo no README
+      run: |
+        if ! grep -R "youtube\|youtu.be\|mp4" -i projeto/README.md; then
+          echo "Vídeo não encontrado"
+          exit 1
+        fi
+
+    - name: 🟢 Aprovado
+      if: success()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const issue = context.issue;
+          await github.issues.addLabels({ ...issue, labels: ["aprovado"] });
+          await github.issues.createComment({
+            ...issue,
+            body: "✔ **Validação concluída: APROVADO**\nSeu projeto atende aos requisitos mínimos!"
+          });
+
+    - name: 🔴 Reprovado
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const issue = context.issue;
+          await github.issues.addLabels({ ...issue, labels: ["reprovado"] });
+          await github.issues.createComment({
+            ...issue,
+            body: "❌ **Validação concluída: REPROVADO**\nAlgum requisito obrigatório não foi encontrado."
+          });
