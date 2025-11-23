@@ -1,0 +1,63 @@
+[
+  {
+    "name": "entrega",
+    "color": "0E8A16",
+    "description": "Issue de entrega de desafio"
+  },
+  {
+    "name": "aguardando-validação",
+    "color": "FBCA04",
+    "description": "Aguardando validação automática"
+  },
+  {
+    "name": "aprovado",
+    "color": "0E8A16",
+    "description": "Entrega aprovada"
+  },
+  {
+    "name": "reprovado",
+    "color": "D93F0B",
+    "description": "Entrega reprovada"
+  },
+  {
+    "name": "validado",
+    "color": "5319E7",
+    "description": "Validação concluída"
+  },
+  {
+    "name": "participante",
+    "color": "1D76DB",
+    "description": "Novo participante"
+  },
+  {
+    "name": "fork-automático",
+    "color": "C2E0C6",
+    "description": "Fork registrado automaticamente"
+  },
+  {
+    "name": "relatório",
+    "color": "D4C5F9",
+    "description": "Relatório semanal"
+  },
+  {
+    "name": "estatísticas",
+    "color": "BFD4F2",
+    "description": "Dados estatísticos"
+  },
+  {
+    "name": "automático",
+    "color": "EDEDED",
+    "description": "Criado por automação"
+  },
+  {
+    "name": "sync",
+    "color": "FEF2C0",
+    "description": "Sincronização de dados"
+  },
+  {
+    "name": "automação",
+    "color": "C5DEF5",
+    "description": "Processo automatizado"
+  }
+]
+

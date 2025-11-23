@@ -1,0 +1,151 @@
+name: 👋 Mensagem de Boas-vindas
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - name: 👋 Mensagem para primeiro contribuidor
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const creator = context.payload.sender.login;
+            
+            // Verificar se é primeira contribuição
+            let isFirstContribution = false;
+            
+            try {
+              const { data: issues } = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                creator: creator,
+                state: 'all',
+                per_page: 100
+              });
+              
+              // Excluir a issue/PR atual
+              const previousContributions = issues.filter(item => {
+                if (context.eventName === 'issues') {
+                  return item.number !== context.issue.number;
+                } else {
+                  return item.number !== context.payload.pull_request.number;
+                }
+              });
+              
+              isFirstContribution = previousContributions.length === 0;
+            } catch (error) {
+              console.log('Erro ao verificar contribuições anteriores:', error.message);
+            }
+            
+            // Se não for primeira contribuição, não fazer nada
+            if (!isFirstContribution) {
+              console.log('Não é primeira contribuição. Pulando mensagem de boas-vindas.');
+              return;
+            }
+            
+            // Mensagem de boas-vindas
+            let welcomeMessage = '';
+            
+            if (context.eventName === 'issues') {
+              // É uma Issue
+              const isEntrega = context.payload.issue.labels.some(l => l.name === 'entrega');
+              
+              if (isEntrega) {
+                welcomeMessage = `## 🎉 Primeira Entrega!
+
+Olá @${creator}! Seja muito bem-vindo(a) à comunidade **HDEV**! 🚀
+
+Esta é sua **primeira entrega** e estamos muito felizes em tê-lo(a) aqui!
+
+---
+
+### 🤖 O que acontece agora?
+
+Nosso sistema de validação automática irá:
+
+1. ✅ Verificar se seu repositório existe e é acessível
+2. ✅ Validar a presença de README
+3. ✅ Confirmar uso das tecnologias especificadas
+4. ✅ Checar prints/GIFs demonstrativos
+5. ✅ Verificar vídeo demonstrativo
+
+**Aguarde alguns segundos** e o resultado será comentado aqui automaticamente!
+
+---
+
+### 📚 Recursos Úteis
+
+- 📖 [Documentação de Automação](../AUTOMATION.md)
+- 💬 Participe das discussões
+- 🏅 Após aprovação, você receberá seu badge!
+
+---
+
+**Boa sorte e bem-vindo à família HDEV! 💪**`;
+              } else {
+                welcomeMessage = `## 👋 Primeira Contribuição!
+
+Olá @${creator}! Seja bem-vindo(a) à comunidade **HDEV**!
+
+Obrigado por abrir sua primeira Issue aqui. A equipe irá revisar em breve!
+
+---
+
+### 💡 Dicas
+
+- Se for reportar um problema, forneça o máximo de detalhes possível
+- Se for uma dúvida, não hesite em perguntar
+- Se for uma sugestão, adoraríamos ouvir suas ideias!
+
+---
+
+**Obrigado por fazer parte da HDEV! 🚀**`;
+              }
+              
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: welcomeMessage
+              });
+              
+            } else if (context.eventName === 'pull_request_target') {
+              // É um Pull Request
+              welcomeMessage = `## 🎉 Primeiro Pull Request!
+
+Olá @${creator}! Seja muito bem-vindo(a) à comunidade **HDEV**!
+
+Obrigado por contribuir com seu primeiro Pull Request! 🚀
+
+---
+
+### 🔍 Próximos Passos
+
+- Aguarde a revisão da equipe
+- Responda aos comentários se houver solicitações de mudança
+- Continue contribuindo!
+
+---
+
+**Obrigado por fazer parte da HDEV! 💪**`;
+              
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: welcomeMessage
+              });
+            }
+            
+            console.log('✅ Mensagem de boas-vindas enviada para primeira contribuição!');
+

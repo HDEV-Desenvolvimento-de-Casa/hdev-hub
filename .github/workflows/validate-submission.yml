@@ -1,0 +1,221 @@
+name: 🔍 Validar Entrega do Desafio
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  validate:
+    name: Validar submissão
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'entrega') || contains(github.event.issue.title, 'Entrega') || contains(github.event.issue.title, 'entrega')
+    permissions:
+      issues: write
+      contents: read
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      
+      - name: 🔍 Extrair informações da Issue
+        id: extract
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueBody = context.payload.issue.body || '';
+            const issueNumber = context.payload.issue.number;
+            const author = context.payload.issue.user.login;
+            
+            // Regex para extrair URLs do repositório e vídeo
+            const repoMatch = issueBody.match(/(?:reposit[óo]rio|repo|link do projeto)[:\s]*([^\s\n]+)/i);
+            const videoMatch = issueBody.match(/(?:v[íi]deo|video|demonstra[çc][ãa]o)[:\s]*([^\s\n]+)/i);
+            
+            const repoUrl = repoMatch ? repoMatch[1].trim() : null;
+            const videoUrl = videoMatch ? videoMatch[1].trim() : null;
+            
+            core.setOutput('repo_url', repoUrl || '');
+            core.setOutput('video_url', videoUrl || '');
+            core.setOutput('author', author);
+            core.setOutput('issue_number', issueNumber);
+            
+            console.log('Repositório:', repoUrl);
+            console.log('Vídeo:', videoUrl);
+            
+            return { repoUrl, videoUrl, author };
+      
+      - name: 🧪 Validar repositório
+        id: validate_repo
+        if: steps.extract.outputs.repo_url != ''
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const repoUrl = '${{ steps.extract.outputs.repo_url }}';
+            const repoMatch = repoUrl.match(/github\.com\/([^\/]+)\/([^\/\s]+)/);
+            
+            if (!repoMatch) {
+              core.setOutput('valid', 'false');
+              core.setOutput('message', '❌ URL do repositório inválida');
+              return false;
+            }
+            
+            const owner = repoMatch[1];
+            const repo = repoMatch[2].replace(/\.git$/, '');
+            
+            try {
+              // Verificar se o repositório existe
+              const { data: repoData } = await github.rest.repos.get({
+                owner: owner,
+                repo: repo
+              });
+              
+              core.setOutput('repo_exists', 'true');
+              
+              // Verificar README
+              let readmeContent = '';
+              try {
+                const { data: readme } = await github.rest.repos.getReadme({
+                  owner: owner,
+                  repo: repo
+                });
+                readmeContent = Buffer.from(readme.content, 'base64').toString('utf-8');
+                core.setOutput('has_readme', 'true');
+              } catch (e) {
+                core.setOutput('has_readme', 'false');
+                console.log('README não encontrado');
+              }
+              
+              // Verificar menções a SQLite
+              const hasSqlite = readmeContent.toLowerCase().includes('sqlite');
+              core.setOutput('has_sqlite', hasSqlite ? 'true' : 'false');
+              
+              // Verificar imagens no README
+              const hasImages = /!\[.*\]\(.*\)/.test(readmeContent) || /<img/.test(readmeContent);
+              core.setOutput('has_images', hasImages ? 'true' : 'false');
+              
+              // Verificar vídeo no README
+              const hasVideo = readmeContent.toLowerCase().includes('youtube') || 
+                              readmeContent.toLowerCase().includes('loom') ||
+                              readmeContent.toLowerCase().includes('.mp4') ||
+                              readmeContent.toLowerCase().includes('video');
+              core.setOutput('has_video_in_readme', hasVideo ? 'true' : 'false');
+              
+              core.setOutput('valid', 'true');
+              
+              return {
+                repoExists: true,
+                hasReadme: readmeContent !== '',
+                hasSqlite,
+                hasImages,
+                hasVideo
+              };
+              
+            } catch (error) {
+              core.setOutput('valid', 'false');
+              core.setOutput('repo_exists', 'false');
+              core.setOutput('message', `❌ Repositório não encontrado ou inacessível: ${error.message}`);
+              return false;
+            }
+      
+      - name: 📝 Calcular resultado da validação
+        id: result
+        run: |
+          REPO_EXISTS="${{ steps.validate_repo.outputs.repo_exists }}"
+          HAS_README="${{ steps.validate_repo.outputs.has_readme }}"
+          HAS_SQLITE="${{ steps.validate_repo.outputs.has_sqlite }}"
+          HAS_IMAGES="${{ steps.validate_repo.outputs.has_images }}"
+          HAS_VIDEO="${{ steps.validate_repo.outputs.has_video_in_readme }}"
+          VIDEO_URL="${{ steps.extract.outputs.video_url }}"
+          
+          # Verificar se tem vídeo (no README ou na Issue)
+          if [ "$HAS_VIDEO" == "true" ] || [ -n "$VIDEO_URL" ]; then
+            VIDEO_CHECK="true"
+          else
+            VIDEO_CHECK="false"
+          fi
+          
+          # Determinar se foi aprovado
+          if [ "$REPO_EXISTS" == "true" ] && [ "$HAS_README" == "true" ] && [ "$HAS_SQLITE" == "true" ] && [ "$HAS_IMAGES" == "true" ] && [ "$VIDEO_CHECK" == "true" ]; then
+            echo "status=aprovado" >> $GITHUB_OUTPUT
+            echo "emoji=✅" >> $GITHUB_OUTPUT
+          else
+            echo "status=reprovado" >> $GITHUB_OUTPUT
+            echo "emoji=❌" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "repo_exists=$REPO_EXISTS" >> $GITHUB_OUTPUT
+          echo "has_readme=$HAS_README" >> $GITHUB_OUTPUT
+          echo "has_sqlite=$HAS_SQLITE" >> $GITHUB_OUTPUT
+          echo "has_images=$HAS_IMAGES" >> $GITHUB_OUTPUT
+          echo "has_video=$VIDEO_CHECK" >> $GITHUB_OUTPUT
+      
+      - name: 💬 Comentar resultado na Issue
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const status = '${{ steps.result.outputs.status }}';
+            const emoji = '${{ steps.result.outputs.emoji }}';
+            const author = '${{ steps.extract.outputs.author }}';
+            
+            const repoExists = '${{ steps.result.outputs.repo_exists }}' === 'true';
+            const hasReadme = '${{ steps.result.outputs.has_readme }}' === 'true';
+            const hasSqlite = '${{ steps.result.outputs.has_sqlite }}' === 'true';
+            const hasImages = '${{ steps.result.outputs.has_images }}' === 'true';
+            const hasVideo = '${{ steps.result.outputs.has_video }}' === 'true';
+            
+            const checkMark = (value) => value ? '✅' : '❌';
+            
+            let comment = `## ${emoji} Resultado da Validação Automática\n\n`;
+            comment += `**Participante:** @${author}\n`;
+            comment += `**Status:** \`${status}\`\n\n`;
+            comment += `---\n\n`;
+            comment += `### 📋 Checklist de Validação\n\n`;
+            comment += `${checkMark(repoExists)} Repositório existe\n`;
+            comment += `${checkMark(hasReadme)} README presente\n`;
+            comment += `${checkMark(hasSqlite)} SQLite mencionado no projeto\n`;
+            comment += `${checkMark(hasImages)} Prints/GIFs no README\n`;
+            comment += `${checkMark(hasVideo)} Vídeo demonstrativo presente\n\n`;
+            comment += `---\n\n`;
+            
+            if (status === 'aprovado') {
+              comment += `### 🎉 Parabéns!\n\n`;
+              comment += `Sua entrega foi **aprovada** na validação automática!\n\n`;
+              comment += `**Próximos passos:**\n`;
+              comment += `- Aguarde a revisão manual (se aplicável)\n`;
+              comment += `- Seu badge de participação será concedido em breve\n`;
+              comment += `- Continue participando dos próximos desafios!\n\n`;
+            } else {
+              comment += `### ⚠️ Entrega Incompleta\n\n`;
+              comment += `Sua entrega não passou na validação automática.\n\n`;
+              comment += `**O que fazer:**\n`;
+              comment += `- Verifique os itens marcados com ❌\n`;
+              comment += `- Corrija os problemas no seu repositório\n`;
+              comment += `- Edite esta Issue com as informações atualizadas\n\n`;
+            }
+            
+            comment += `---\n\n`;
+            comment += `_💡 Esta validação é automática. Em caso de dúvidas, mencione um moderador._\n`;
+            comment += `_🤖 Validado em: ${new Date().toISOString()}_`;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
+            
+            // Adicionar labels
+            const labels = [status];
+            if (status === 'aprovado') {
+              labels.push('validado');
+            }
+            
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: labels
+            });
+

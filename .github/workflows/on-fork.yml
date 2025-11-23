@@ -1,0 +1,102 @@
+name: 🍴 Registro de Fork
+
+on:
+  fork:
+
+jobs:
+  register-fork:
+    name: Registrar participante que fez fork
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    
+    steps:
+      - name: 📥 Checkout do repositório
+        uses: actions/checkout@v4
+      
+      - name: 🎉 Criar Issue de boas-vindas para o participante
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const forker = context.payload.forkee.owner.login;
+            const forkUrl = context.payload.forkee.html_url;
+            const forkCreatedAt = context.payload.forkee.created_at;
+            
+            const issueBody = `## 🎉 Novo Participante HDEV!
+            
+            **Participante:** @${forker}
+            **Fork:** ${forkUrl}
+            **Data:** ${forkCreatedAt}
+            
+            ---
+            
+            ### 📋 Próximos Passos
+            
+            Olá @${forker}! Seja bem-vindo(a) à comunidade HDEV! 🚀
+            
+            Você acabou de fazer fork do **HDEV Hub**. Aqui está o que você precisa fazer:
+            
+            1. **📚 Acesse os desafios** no repositório privado (se você tem acesso)
+            2. **💻 Desenvolva sua solução** seguindo as instruções do desafio
+            3. **📤 Envie sua entrega** criando uma Issue com o template "🚀 Enviar entrega do desafio"
+            
+            ---
+            
+            ### 🏅 Sistema de Validação
+            
+            Quando você enviar sua entrega, nosso sistema irá validar automaticamente:
+            
+            ✅ Repositório existe  
+            ✅ README presente  
+            ✅ Tecnologias corretas (ex: SQLite)  
+            ✅ Prints/GIFs no README  
+            ✅ Vídeo demonstrativo  
+            
+            ---
+            
+            ### 🆘 Precisa de Ajuda?
+            
+            - Leia a documentação completa no README
+            - Abra uma Issue com suas dúvidas
+            - Participe das discussões da comunidade
+            
+            ---
+            
+            **Boa sorte e bom código! 💪**
+            
+            _Esta Issue foi criada automaticamente pelo sistema HDEV._`;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🎉 Novo participante: ${forker}`,
+              body: issueBody,
+              labels: ['participante', 'fork-automático']
+            });
+            
+            console.log(`✅ Issue de boas-vindas criada para @${forker}`);
+      
+      - name: 📊 Registrar fork em arquivo de participantes
+        run: |
+          mkdir -p participantes
+          FORKER="${{ github.event.forkee.owner.login }}"
+          FORK_URL="${{ github.event.forkee.html_url }}"
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          echo "- **@${FORKER}** - [Fork](${FORK_URL}) - ${TIMESTAMP}" >> participantes/forks.md
+          
+          echo "✅ Participante ${FORKER} registrado"
+      
+      - name: 💾 Commit do registro (opcional)
+        continue-on-error: true
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "HDEV Bot"
+          git add participantes/forks.md
+          git commit -m "🎉 Novo participante: ${{ github.event.forkee.owner.login }}"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

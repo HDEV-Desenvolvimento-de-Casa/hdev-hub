@@ -1,0 +1,129 @@
+name: 🚀 Enviar entrega do desafio
+description: Envie sua solução para validação automática
+title: "[ENTREGA] "
+labels: ["entrega", "aguardando-validação"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🚀 Envio de Entrega - Desafio HDEV
+        
+        Preencha os campos abaixo para enviar sua entrega.
+        O sistema irá validar automaticamente sua submissão.
+  
+  - type: input
+    id: challenge
+    attributes:
+      label: 🎯 Qual desafio você está entregando?
+      description: "Nome do desafio (ex: EstacionamentoOn)"
+      placeholder: EstacionamentoOn
+    validations:
+      required: true
+  
+  - type: input
+    id: repository
+    attributes:
+      label: 🔗 Link do Repositório
+      description: URL completa do seu repositório no GitHub
+      placeholder: https://github.com/seu-usuario/seu-repositorio
+    validations:
+      required: true
+  
+  - type: input
+    id: video
+    attributes:
+      label: 🎥 Link do Vídeo Demonstrativo
+      description: URL do vídeo (YouTube, Loom, ou outro)
+      placeholder: https://www.youtube.com/watch?v=...
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: tech
+    attributes:
+      label: 💻 Tecnologia Utilizada
+      description: Qual tecnologia você usou?
+      options:
+        - ASP.NET Core / C#
+        - Python (Django/Flask/FastAPI)
+        - Node.js (Express/NestJS)
+        - Java (Spring Boot)
+        - PHP (Laravel)
+        - Ruby (Rails)
+        - Electron
+        - WPF / WinForms
+        - Flutter Desktop
+        - Outra
+    validations:
+      required: true
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Descrição da Solução
+      description: Descreva brevemente sua implementação
+      placeholder: |
+        - Tecnologias utilizadas
+        - Principais funcionalidades implementadas
+        - Desafios encontrados
+    validations:
+      required: true
+  
+  - type: checkboxes
+    id: requirements
+    attributes:
+      label: ✅ Checklist de Requisitos
+      description: Marque o que você implementou
+      options:
+        - label: Cadastro de veículos
+          required: true
+        - label: Registro de entrada com data/hora automática
+          required: true
+        - label: Cálculo de permanência
+          required: true
+        - label: Cálculo de valor (R$ 18,00 primeiras 2h + R$ 5,00/h adicional)
+          required: true
+        - label: Registro de saída
+          required: true
+        - label: Controle de status
+          required: true
+        - label: Sistema de login
+          required: true
+        - label: Uso de SQLite local
+          required: true
+        - label: README com prints/GIFs
+          required: true
+        - label: Vídeo demonstrativo
+          required: true
+  
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 📋 Termos
+      options:
+        - label: Confirmo que esta é minha solução original
+          required: true
+        - label: Autorizo o compartilhamento desta solução na comunidade HDEV
+          required: false
+  
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ## 🤖 Validação Automática
+        
+        Após enviar esta Issue, nosso sistema irá:
+        
+        1. ✅ Verificar se o repositório existe
+        2. ✅ Validar presença de README
+        3. ✅ Confirmar uso de SQLite
+        4. ✅ Checar prints/GIFs no README
+        5. ✅ Verificar vídeo demonstrativo
+        
+        O resultado será comentado automaticamente nesta Issue em alguns instantes.
+        
+        **Boa sorte! 🚀**
+

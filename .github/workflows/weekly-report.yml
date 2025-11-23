@@ -1,0 +1,145 @@
+name: 📊 Relatório Semanal de Participação
+
+on:
+  schedule:
+    # Executa toda segunda-feira às 9h UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+jobs:
+  generate-report:
+    name: Gerar relatório semanal
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      
+      - name: 📊 Coletar estatísticas
+        id: stats
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            
+            // Issues da semana
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              since: oneWeekAgo.toISOString(),
+              per_page: 100
+            });
+            
+            const entregas = issues.filter(i => i.labels.some(l => l.name === 'entrega'));
+            const aprovados = issues.filter(i => i.labels.some(l => l.name === 'aprovado'));
+            const reprovados = issues.filter(i => i.labels.some(l => l.name === 'reprovado'));
+            const participantes = issues.filter(i => i.labels.some(l => l.name === 'participante'));
+            
+            core.setOutput('total_issues', issues.length);
+            core.setOutput('entregas', entregas.length);
+            core.setOutput('aprovados', aprovados.length);
+            core.setOutput('reprovados', reprovados.length);
+            core.setOutput('novos_participantes', participantes.length);
+            
+            // Top contribuidores da semana
+            const contributors = {};
+            entregas.forEach(issue => {
+              const user = issue.user.login;
+              contributors[user] = (contributors[user] || 0) + 1;
+            });
+            
+            const topContributors = Object.entries(contributors)
+              .sort(([,a], [,b]) => b - a)
+              .slice(0, 5)
+              .map(([user, count]) => `- @${user} (${count} entrega${count > 1 ? 's' : ''})`)
+              .join('\n');
+            
+            core.setOutput('top_contributors', topContributors || '_Nenhum contribuidor esta semana_');
+            
+            return {
+              totalIssues: issues.length,
+              entregas: entregas.length,
+              aprovados: aprovados.length,
+              reprovados: reprovados.length,
+              participantes: participantes.length
+            };
+      
+      - name: 📢 Criar Issue com relatório
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const today = new Date().toLocaleDateString('pt-BR');
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            
+            const totalIssues = '${{ steps.stats.outputs.total_issues }}';
+            const entregas = '${{ steps.stats.outputs.entregas }}';
+            const aprovados = '${{ steps.stats.outputs.aprovados }}';
+            const reprovados = '${{ steps.stats.outputs.reprovados }}';
+            const participantes = '${{ steps.stats.outputs.novos_participantes }}';
+            const topContributors = `${{ steps.stats.outputs.top_contributors }}`;
+            
+            const taxaAprovacao = entregas > 0 
+              ? Math.round((aprovados / entregas) * 100) 
+              : 0;
+            
+            const reportBody = `## 📊 Relatório Semanal HDEV
+            
+            **Período:** ${oneWeekAgo.toLocaleDateString('pt-BR')} a ${today}
+            
+            ---
+            
+            ### 📈 Estatísticas Gerais
+            
+            | Métrica | Quantidade |
+            |---------|------------|
+            | 🎯 Entregas Recebidas | ${entregas} |
+            | ✅ Aprovadas | ${aprovados} |
+            | ❌ Reprovadas | ${reprovados} |
+            | 🎉 Novos Participantes | ${participantes} |
+            | 📊 Taxa de Aprovação | ${taxaAprovacao}% |
+            
+            ---
+            
+            ### 🏆 Top Contribuidores da Semana
+            
+            ${topContributors}
+            
+            ---
+            
+            ### 💡 Insights
+            
+            ${entregas === 0 ? '⚠️ Nenhuma entrega esta semana. Considere divulgar mais os desafios!' : ''}
+            ${taxaAprovacao < 50 && entregas > 0 ? '⚠️ Taxa de aprovação baixa. Verifique se as instruções estão claras.' : ''}
+            ${taxaAprovacao >= 80 && entregas > 0 ? '🎉 Excelente taxa de aprovação! A comunidade está engajada!' : ''}
+            ${participantes > 5 ? '🚀 Crescimento acelerado de participantes! Continue assim!' : ''}
+            
+            ---
+            
+            ### 📋 Próximas Ações
+            
+            - [ ] Revisar entregas pendentes
+            - [ ] Atualizar documentação (se necessário)
+            - [ ] Engajar com novos participantes
+            - [ ] Planejar próximos desafios
+            
+            ---
+            
+            _🤖 Relatório gerado automaticamente toda segunda-feira às 9h UTC_
+            `;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📊 Relatório Semanal - ${today}`,
+              body: reportBody,
+              labels: ['relatório', 'estatísticas', 'automático']
+            });
+

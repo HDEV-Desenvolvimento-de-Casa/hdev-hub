@@ -1,0 +1,60 @@
+name: 🏷️ Criar Labels Automáticas
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-labels:
+    name: Criar todas as labels necessárias
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      
+      - name: 🏷️ Criar labels
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const labels = JSON.parse(fs.readFileSync('.github/labels.json', 'utf8'));
+            
+            console.log(`📋 Criando ${labels.length} labels...`);
+            
+            for (const label of labels) {
+              try {
+                // Tentar criar a label
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                  color: label.color,
+                  description: label.description
+                });
+                console.log(`✅ Label criada: ${label.name}`);
+              } catch (error) {
+                if (error.status === 422) {
+                  // Label já existe, vamos atualizar
+                  try {
+                    await github.rest.issues.updateLabel({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      name: label.name,
+                      color: label.color,
+                      description: label.description
+                    });
+                    console.log(`🔄 Label atualizada: ${label.name}`);
+                  } catch (updateError) {
+                    console.log(`⚠️ Erro ao atualizar label ${label.name}: ${updateError.message}`);
+                  }
+                } else {
+                  console.log(`❌ Erro ao criar label ${label.name}: ${error.message}`);
+                }
+              }
+            }
+            
+            console.log('✅ Processo de criação de labels concluído!');
+
