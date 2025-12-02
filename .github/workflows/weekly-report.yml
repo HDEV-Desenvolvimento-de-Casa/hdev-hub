@@ -90,50 +90,62 @@ jobs:
               ? Math.round((aprovados / entregas) * 100) 
               : 0;
             
-            const reportBody = `## 📊 Relatório Semanal HDEV
+            const insights = [];
+            if (entregas === 0) {
+              insights.push('⚠️ Nenhuma entrega esta semana. Considere divulgar mais os desafios!');
+            }
+            if (taxaAprovacao < 50 && entregas > 0) {
+              insights.push('⚠️ Taxa de aprovação baixa. Verifique se as instruções estão claras.');
+            }
+            if (taxaAprovacao >= 80 && entregas > 0) {
+              insights.push('🎉 Excelente taxa de aprovação! A comunidade está engajada!');
+            }
+            if (participantes > 5) {
+              insights.push('🚀 Crescimento acelerado de participantes! Continue assim!');
+            }
             
-            **Período:** ${oneWeekAgo.toLocaleDateString('pt-BR')} a ${today}
-            
-            ---
-            
-            ### 📈 Estatísticas Gerais
-            
-            | Métrica | Quantidade |
-            |---------|------------|
-            | 🎯 Entregas Recebidas | ${entregas} |
-            | ✅ Aprovadas | ${aprovados} |
-            | ❌ Reprovadas | ${reprovados} |
-            | 🎉 Novos Participantes | ${participantes} |
-            | 📊 Taxa de Aprovação | ${taxaAprovacao}% |
-            
-            ---
-            
-            ### 🏆 Top Contribuidores da Semana
-            
-            ${topContributors}
-            
-            ---
-            
-            ### 💡 Insights
-            
-            ${entregas === 0 ? '⚠️ Nenhuma entrega esta semana. Considere divulgar mais os desafios!' : ''}
-            ${taxaAprovacao < 50 && entregas > 0 ? '⚠️ Taxa de aprovação baixa. Verifique se as instruções estão claras.' : ''}
-            ${taxaAprovacao >= 80 && entregas > 0 ? '🎉 Excelente taxa de aprovação! A comunidade está engajada!' : ''}
-            ${participantes > 5 ? '🚀 Crescimento acelerado de participantes! Continue assim!' : ''}
-            
-            ---
-            
-            ### 📋 Próximas Ações
-            
-            - [ ] Revisar entregas pendentes
-            - [ ] Atualizar documentação (se necessário)
-            - [ ] Engajar com novos participantes
-            - [ ] Planejar próximos desafios
-            
-            ---
-            
-            _🤖 Relatório gerado automaticamente toda segunda-feira às 9h UTC_
-            `;
+            const reportBody = [
+              '## 📊 Relatório Semanal HDEV',
+              '',
+              `**Período:** ${oneWeekAgo.toLocaleDateString('pt-BR')} a ${today}`,
+              '',
+              '---',
+              '',
+              '### 📈 Estatísticas Gerais',
+              '',
+              '| Métrica | Quantidade |',
+              '|---------|------------|',
+              `| 🎯 Entregas Recebidas | ${entregas} |`,
+              `| ✅ Aprovadas | ${aprovados} |`,
+              `| ❌ Reprovadas | ${reprovados} |`,
+              `| 🎉 Novos Participantes | ${participantes} |`,
+              `| 📊 Taxa de Aprovação | ${taxaAprovacao}% |`,
+              '',
+              '---',
+              '',
+              '### 🏆 Top Contribuidores da Semana',
+              '',
+              topContributors,
+              '',
+              '---',
+              '',
+              '### 💡 Insights',
+              '',
+              insights.length > 0 ? insights.join('\n') : '_Nenhum insight significativo esta semana._',
+              '',
+              '---',
+              '',
+              '### 📋 Próximas Ações',
+              '',
+              '- [ ] Revisar entregas pendentes',
+              '- [ ] Atualizar documentação (se necessário)',
+              '- [ ] Engajar com novos participantes',
+              '- [ ] Planejar próximos desafios',
+              '',
+              '---',
+              '',
+              '_🤖 Relatório gerado automaticamente toda segunda-feira às 9h UTC_'
+            ].join('\n');
             
             await github.rest.issues.create({
               owner: context.repo.owner,

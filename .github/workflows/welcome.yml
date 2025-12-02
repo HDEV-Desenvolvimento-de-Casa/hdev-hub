@@ -61,55 +61,59 @@ jobs:
               const isEntrega = context.payload.issue.labels.some(l => l.name === 'entrega');
               
               if (isEntrega) {
-                welcomeMessage = `## 🎉 Primeira Entrega!
-
-Olá @${creator}! Seja muito bem-vindo(a) à comunidade **HDEV**! 🚀
-
-Esta é sua **primeira entrega** e estamos muito felizes em tê-lo(a) aqui!
-
----
-
-### 🤖 O que acontece agora?
-
-Nosso sistema de validação automática irá:
-
-1. ✅ Verificar se seu repositório existe e é acessível
-2. ✅ Validar a presença de README
-3. ✅ Confirmar uso das tecnologias especificadas
-4. ✅ Checar prints/GIFs demonstrativos
-5. ✅ Verificar vídeo demonstrativo
-
-**Aguarde alguns segundos** e o resultado será comentado aqui automaticamente!
-
----
-
-### 📚 Recursos Úteis
-
-- 📖 [Documentação de Automação](../AUTOMATION.md)
-- 💬 Participe das discussões
-- 🏅 Após aprovação, você receberá seu badge!
-
----
-
-**Boa sorte e bem-vindo à família HDEV! 💪**`;
+                welcomeMessage = [
+                  '## 🎉 Primeira Entrega!',
+                  '',
+                  `Olá @${creator}! Seja muito bem-vindo(a) à comunidade **HDEV**! 🚀`,
+                  '',
+                  'Esta é sua **primeira entrega** e estamos muito felizes em tê-lo(a) aqui!',
+                  '',
+                  '---',
+                  '',
+                  '### 🤖 O que acontece agora?',
+                  '',
+                  'Nosso sistema de validação automática irá:',
+                  '',
+                  '1. ✅ Verificar se seu repositório existe e é acessível',
+                  '2. ✅ Validar a presença de README',
+                  '3. ✅ Confirmar uso das tecnologias especificadas',
+                  '4. ✅ Checar prints/GIFs demonstrativos',
+                  '5. ✅ Verificar vídeo demonstrativo',
+                  '',
+                  '**Aguarde alguns segundos** e o resultado será comentado aqui automaticamente!',
+                  '',
+                  '---',
+                  '',
+                  '### 📚 Recursos Úteis',
+                  '',
+                  '- 📖 [Documentação de Automação](../AUTOMATION.md)',
+                  '- 💬 Participe das discussões',
+                  '- 🏅 Após aprovação, você receberá seu badge!',
+                  '',
+                  '---',
+                  '',
+                  '**Boa sorte e bem-vindo à família HDEV! 💪**'
+                ].join('\n');
               } else {
-                welcomeMessage = `## 👋 Primeira Contribuição!
-
-Olá @${creator}! Seja bem-vindo(a) à comunidade **HDEV**!
-
-Obrigado por abrir sua primeira Issue aqui. A equipe irá revisar em breve!
-
----
-
-### 💡 Dicas
-
-- Se for reportar um problema, forneça o máximo de detalhes possível
-- Se for uma dúvida, não hesite em perguntar
-- Se for uma sugestão, adoraríamos ouvir suas ideias!
-
----
-
-**Obrigado por fazer parte da HDEV! 🚀**`;
+                welcomeMessage = [
+                  '## 👋 Primeira Contribuição!',
+                  '',
+                  `Olá @${creator}! Seja bem-vindo(a) à comunidade **HDEV**!`,
+                  '',
+                  'Obrigado por abrir sua primeira Issue aqui. A equipe irá revisar em breve!',
+                  '',
+                  '---',
+                  '',
+                  '### 💡 Dicas',
+                  '',
+                  '- Se for reportar um problema, forneça o máximo de detalhes possível',
+                  '- Se for uma dúvida, não hesite em perguntar',
+                  '- Se for uma sugestão, adoraríamos ouvir suas ideias!',
+                  '',
+                  '---',
+                  '',
+                  '**Obrigado por fazer parte da HDEV! 🚀**'
+                ].join('\n');
               }
               
               await github.rest.issues.createComment({
@@ -121,23 +125,25 @@ Obrigado por abrir sua primeira Issue aqui. A equipe irá revisar em breve!
               
             } else if (context.eventName === 'pull_request_target') {
               // É um Pull Request
-              welcomeMessage = `## 🎉 Primeiro Pull Request!
-
-Olá @${creator}! Seja muito bem-vindo(a) à comunidade **HDEV**!
-
-Obrigado por contribuir com seu primeiro Pull Request! 🚀
-
----
-
-### 🔍 Próximos Passos
-
-- Aguarde a revisão da equipe
-- Responda aos comentários se houver solicitações de mudança
-- Continue contribuindo!
-
----
-
-**Obrigado por fazer parte da HDEV! 💪**`;
+              welcomeMessage = [
+                '## 🎉 Primeiro Pull Request!',
+                '',
+                `Olá @${creator}! Seja muito bem-vindo(a) à comunidade **HDEV**!`,
+                '',
+                'Obrigado por contribuir com seu primeiro Pull Request! 🚀',
+                '',
+                '---',
+                '',
+                '### 🔍 Próximos Passos',
+                '',
+                '- Aguarde a revisão da equipe',
+                '- Responda aos comentários se houver solicitações de mudança',
+                '- Continue contribuindo!',
+                '',
+                '---',
+                '',
+                '**Obrigado por fazer parte da HDEV! 💪**'
+              ].join('\n');
               
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
