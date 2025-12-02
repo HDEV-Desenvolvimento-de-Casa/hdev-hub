@@ -10,7 +10,7 @@ Atualmente, a POC valida **somente o desafio**:
 ## 📁 Estrutura do Repositório
 
 ```
-hdev-desafios/
+hdev-hub/
 ├── iniciante/
 │   └── desafio-estacionamentoon/
 │       ├── README.md                    # 📄 Enunciado principal
