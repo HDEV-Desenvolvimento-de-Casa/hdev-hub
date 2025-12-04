@@ -1,0 +1,49 @@
+name: 🐛 Reportar Bug
+description: Reporte um problema ou bug encontrado
+title: "[BUG] "
+labels: ["bug"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🐛 Reporte de Bug
+        
+        Descreva o problema encontrado de forma clara e objetiva.
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Descrição do Bug
+      description: Descreva o problema em detalhes
+      placeholder: |
+        O que aconteceu?
+        O que você esperava que acontecesse?
+    validations:
+      required: true
+  
+  - type: textarea
+    id: steps
+    attributes:
+      label: 🔄 Passos para Reproduzir
+      description: Como reproduzir o problema?
+      placeholder: |
+        1. Vá para...
+        2. Clique em...
+        3. Veja o erro...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: environment
+    attributes:
+      label: 💻 Ambiente
+      description: Informações sobre seu ambiente
+      placeholder: |
+        - Sistema Operacional: 
+        - Navegador (se aplicável): 
+        - Versão:
+    validations:
+      required: false
+
