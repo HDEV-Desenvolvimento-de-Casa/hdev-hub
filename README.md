@@ -5,6 +5,42 @@ Este repositório contém a **prova de conceito (POC)** do sistema de validaçã
 Atualmente, a POC valida **somente o desafio**:
 
 ### 🅿️ EstacionamentoOn — Desafio HDEV
+---
+
+## 📁 Estrutura do Repositório
+
+```
+hdev-hub/
+├── iniciante/
+│   └── desafio-estacionamentoon/
+│       ├── README.md                    # 📄 Enunciado principal
+│       ├── COMO-PARTICIPAR.md           # 🚀 Instruções de participação
+│       ├── ENTREGA.md                   # 📦 Guia de entrega
+│       ├── BADGES.md                    # 🏅 Informações sobre badges
+│       ├── INSTRUCOES-AVALIACAO.md      # ✅ Critérios de avaliação
+│       └── assets/                      # 📂 Arquivos auxiliares
+│           └── modelo-db.sql
+├── intermediario/
+│   └── (desafios futuros)
+└── avancado/
+    └── (desafios futuros)
+```
+
+---
+
+## 📊 Níveis de Desafio
+
+### 🟢 Iniciante
+Desafios focados em fundamentos de programação e lógica básica.
+
+**Desafios disponíveis:**
+- ✅ EstacionamentoOn - Sistema de gestão de estacionamento
+
+### 🟡 Intermediário  
+_(Planejado)_ - Desafios com lógica mais complexa e integração de APIs.
+
+### 🔴 Avançado  
+_(Planejado)_ - Arquitetura, design patterns e escalabilidade.
 
 ---
 
