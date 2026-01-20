@@ -80,17 +80,6 @@ A análise será feita automaticamente pelo validador .
 
 ---
 
-## 📚 Material de Apoio
-
-📽️ Video:
-> https://youtu.be/mmddpL6So3g
-
-📺 Apresentação:
-> [Estrutura Slides](Desafio_EstacionamentoOn_Do_Código_à_Conquista.pdf).
-
-
----
-
 ## 📝 O que será validado
 
 A validação automática confere:

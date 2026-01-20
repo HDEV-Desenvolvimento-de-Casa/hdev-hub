@@ -1,10 +1,10 @@
 # 🔄 Log de Sincronização HDEV
 
-**Última sincronização:** 2025-12-02 11:40:17 UTC  
+**Última sincronização:** 2026-01-20 11:58:23 UTC  
 **Origem:** hdev-desafios (privado)  
 **Destino:** hdev-hub (público)  
 **Trigger:** push  
-**Commit origem:** 1c18e36af209d8dfb6b1500064db1b9542aea432
+**Commit origem:** c9542f66fd470aa5138efbff8696a1aef1e2702b
 
 ---
 
@@ -12,18 +12,21 @@
 
 ### 📁 Iniciante
 
+- ✅ **desafio-cadastrocliente**
+  - README.md
+  - COMO-PARTICIPAR.md
 - ✅ **desafio-estacionamentoon**
   - README.md
   - COMO-PARTICIPAR.md
   - 📂 assets/
 
-_Total neste nível: 1 desafio(s)_
+_Total neste nível: 2 desafio(s)_
 
 ---
 
 ## 📊 Estatísticas
 
-- **Total de desafios:** 1
+- **Total de desafios:** 2
 - **Status:** ✅ Sincronização bem-sucedida
 
 ---
