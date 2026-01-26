@@ -19,6 +19,14 @@ Não é necessário conhecimento avançado. Os desafios partem do princípio de 
 
 ---
 
+## 📋 Lista de Desafios
+
+- 📖 [CadastroCliente](./desafio-cadastrocliente/README.md) - Sabia mais informações
+- 📖 [EstacionamentoOn](./desafio-estacionamentoon/README.md) - Sabia mais informações
+- 📖 [ListaTarefas](./desafio-listatarefas/README.md) - Sabia mais informações
+
+---
+
 ## 📂 Estrutura dos Desafios
 
 Cada desafio dentro deste nível possui uma estrutura padronizada, que inclui:
@@ -54,3 +62,4 @@ Após concluir os desafios deste nível, o participante estará preparado para a
 
 HDEV — Desenvolvimento de Casa  
 Aprendizado prático, acessível e progressivo
+
