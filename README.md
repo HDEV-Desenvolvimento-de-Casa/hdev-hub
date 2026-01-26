@@ -21,9 +21,9 @@ hdev-hub/
 │       └── assets/                      # 📂 Arquivos auxiliares
 │           └── modelo-db.sql
 ├── intermediario/
-│   └── (desafios futuros)
+│   └── (mesma estrutura)
 └── avancado/
-    └── (desafios futuros)
+    └── (mesma estrutura)
 ```
 
 ---
@@ -34,25 +34,25 @@ hdev-hub/
 Desafios focados em fundamentos de programação e lógica básica.
 
 **Desafios disponíveis:**
-- 📖 [CadastroCliente](./desafio-cadastrocliente/README.md) - Sabia mais informações
-- 📖 [EstacionamentoOn](./desafio-estacionamentoon/README.md) - Sabia mais informações
-- 📖 [ListaTarefas](./desafio-listatarefas/README.md) - Sabia mais informações
+- 📖 [CadastroCliente](./iniciante/desafio-cadastrocliente/README.md) - Sabia mais informações
+- 📖 [EstacionamentoOn](./iniciante/desafio-estacionamentoon/README.md) - Sabia mais informações
+- 📖 [ListaTarefas](./iniciante/desafio-listatarefas/README.md) - Sabia mais informações
 
 ### 🟡 Intermediário  
 Desafios com lógica mais complexa e integração de APIs.
 
 **Desafios disponíveis:**
-- 📖 [Cardapio](./desafio-cardapio//README.md) - Sabia mais informações
-- 📖 [Estoque](./desafio-estoque/README.md) - Sabia mais informações
-- 📖 [OrdemDeServicos](./desafio-ordemdeservicos/README.md) - Sabia mais informações
+- 📖 [Cardapio](./intermediario/desafio-cardapio//README.md) - Sabia mais informações
+- 📖 [Estoque](./intermediario/desafio-estoque/README.md) - Sabia mais informações
+- 📖 [OrdemDeServicos](./intermediario/desafio-ordemdeservicos/README.md) - Sabia mais informações
 
 ### 🔴 Avançado  
 Arquitetura, design patterns e escalabilidade.
 
 **Desafios disponíveis:**
-- 📖 [Aprovacoes](./desafio-aprovacoes/README.md) - Sabia mais informações
-- 📖 [SistemaFinanceiro](./desafio-sistemafinanceiro/README.md) - Sabia mais informações
-- 📖 [PainelDigital](./desafio-paineldigital/README.md) - Sabia mais informações
+- 📖 [Aprovacoes](./avancado/desafio-aprovacoes/README.md) - Sabia mais informações
+- 📖 [SistemaFinanceiro](./avancado/desafio-sistemafinanceiro/README.md) - Sabia mais informações
+- 📖 [PainelDigital](./avancado/desafio-paineldigital/README.md) - Sabia mais informações
 - 
 ---
 
