@@ -34,14 +34,26 @@ hdev-hub/
 Desafios focados em fundamentos de programação e lógica básica.
 
 **Desafios disponíveis:**
-- ✅ EstacionamentoOn - Sistema de gestão de estacionamento
+- 📖 [CadastroCliente](./desafio-cadastrocliente/README.md) - Sabia mais informações
+- 📖 [EstacionamentoOn](./desafio-estacionamentoon/README.md) - Sabia mais informações
+- 📖 [ListaTarefas](./desafio-listatarefas/README.md) - Sabia mais informações
 
 ### 🟡 Intermediário  
-_(Planejado)_ - Desafios com lógica mais complexa e integração de APIs.
+Desafios com lógica mais complexa e integração de APIs.
+
+**Desafios disponíveis:**
+- 📖 [Cardapio](./desafio-cardapio//README.md) - Sabia mais informações
+- 📖 [Estoque](./desafio-estoque/README.md) - Sabia mais informações
+- 📖 [OrdemDeServicos](./desafio-ordemdeservicos/README.md) - Sabia mais informações
 
 ### 🔴 Avançado  
-_(Planejado)_ - Arquitetura, design patterns e escalabilidade.
+Arquitetura, design patterns e escalabilidade.
 
+**Desafios disponíveis:**
+- 📖 [Aprovacoes](./desafio-aprovacoes/README.md) - Sabia mais informações
+- 📖 [SistemaFinanceiro](./desafio-sistemafinanceiro/README.md) - Sabia mais informações
+- 📖 [PainelDigital](./desafio-paineldigital/README.md) - Sabia mais informações
+- 
 ---
 
 ## 🚀 Como enviar sua entrega
