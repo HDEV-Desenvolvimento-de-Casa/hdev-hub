@@ -1,4 +1,4 @@
-# 🧩 HDEV HUB — Validador de Entregas (POC)
+# 🧩 HDEV HUB — Validador de Entregas - Todos os Desafios!
 
 Este repositório contém a **prova de conceito (POC)** do sistema de validação automática das entregas dos desafios da comunidade HDEV.
 
