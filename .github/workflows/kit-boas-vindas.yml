@@ -134,139 +134,144 @@ jobs:
             const assetsFiles = '${{ steps.check-assets.outputs.files }}';
             
             // Construir mensagem de boas-vindas personalizada
-            let welcomeMessage = `# 🎉 **Kit de Boas-Vindas Dinâmico para a Comunidade HDEV**
-
-Olá, **${name}**!
-
-Seja muito bem-vindo(a) à comunidade **HDEV | Desenvolvimento de Casa**! Estamos muito felizes em ter você conosco. Nosso objetivo é criar um ambiente de aprendizado, colaboração e crescimento mútuo.
-
-${avatar ? `![Avatar](${avatar}&s=80)` : ''}
-
-**Perfil GitHub:** [@${username}](${profileUrl})  
-${company ? `**Empresa:** ${company}` : ''}  
-${location ? `**Localização:** ${location}` : ''}  
-${bio ? `**Bio:** ${bio}` : ''}  
-${blog ? `**Website:** ${blog}` : ''}
-
----
-
-## 📊 **Seu Perfil no GitHub**
-
-- 📦 **Repositórios públicos:** ${publicRepos}
-- 👥 **Seguidores:** ${followers}
-- 👤 **Seguindo:** ${following}
-- 📅 **Conta criada há:** ${yearsExperience} ano(s)
-- 🎯 **Nível sugerido:** **${suggestedLevel}**
-
----
-
-## 🚀 **Primeiros Passos Essenciais**
-
-Para que você possa se integrar e aproveitar ao máximo tudo o que oferecemos, preparamos um guia rápido com os primeiros passos essenciais:
-
----
-
-### **📝 Passo 1: Atualize seu Perfil no LinkedIn**
-
-Mostre a todos que você faz parte da nossa comunidade! Isso aumenta sua visibilidade e fortalece nosso grupo.
-
-*   **Adicione nosso banner oficial:** Personalize seu perfil com a nossa identidade visual.
-    *   📥 **Link para baixar o banner da HDEV:** ${assetsExists ? '[Clique aqui para acessar os assets](https://github.com/HDEV-Desenvolvimento-de-Casa/hdev-hub/tree/main/assets)' : 'Os assets estarão disponíveis em breve na pasta `assets/` do repositório'}
-    ${assetsExists && assetsFiles ? `\n    *   **Arquivos disponíveis:**\n${assetsFiles.split(',').map(file => `        - \`${file}\``).join('\n')}` : '    *   _Pasta assets será criada em breve com os modelos para LinkedIn_'}
-*   **Adicione a experiência em seu perfil:**
-    *   **Cargo:** Desenvolvedor Full Stack (Voluntário)
-    *   **Empresa:** HDEV | Desenvolvimento de Casa
-    *   **Tipo de emprego:** Autônomo
-    *   **Localidade:** Remota
-    *   **Descrição:** Sugerimos que você descreva os projetos em que está trabalhando e as tecnologias que está aprendendo conosco!
-    
-    **💡 Dica:** Baseado no seu perfil GitHub, você pode destacar:
-    ${publicRepos > 0 ? `    - ${publicRepos} projeto(s) desenvolvido(s)` : '    - Seus projetos em desenvolvimento'}
-    ${yearsExperience > 0 ? `    - ${yearsExperience} ano(s) de experiência em desenvolvimento` : '    - Sua jornada de aprendizado'}
-    ${suggestedLevel !== 'Iniciante' ? `    - Nível ${suggestedLevel} de conhecimento técnico` : '    - Dedicação ao crescimento profissional'}
-
----
-
-### **👥 Passo 2: Junte-se à nossa Organização no GitHub**
-
-O GitHub é o nosso principal espaço para colaboração em projetos de código aberto.
-
-*   **Aceite o convite:** Você receberá um convite por e-mail para se juntar à nossa organização "HDEV-Desenvolvimento-de-Casa". Por favor, aceite-o para ter acesso aos nossos repositórios.
-    *   Se não encontrar o convite, verifique sua caixa de spam ou acesse diretamente a página da organização no GitHub.
-    *   **Link direto:** [HDEV-Desenvolvimento-de-Casa](https://github.com/HDEV-Desenvolvimento-de-Casa)
-
----
-
-### **🔗 Passo 3: Conecte-se e Participe!**
-
-A interação é a chave para o sucesso da comunidade. Siga-nos em nossas redes e participe das discussões.
-
-*   **Siga nossas redes sociais:**
-    *   **LinkedIn:** [Page](https://www.linkedin.com/company/hdev-desenvolvimento-de-casa/)
-    *   **YouTube:** [Canal](https://www.youtube.com/@hdevinfo)
-*   **Participe do nosso grupo no Whatsapp:**
-    *   [WhatsApp](https://chat.whatsapp.com/GwcomlxHICV1R74eXruWZX)
-
----
-
-## 🎯 **Próximos Passos Recomendados**
-
-Baseado no seu perfil, recomendamos:
-
-1. **📚 Explore os desafios disponíveis:**
-   ${suggestedLevel === 'Iniciante' ? '   - Comece pelos desafios **Iniciante** para fortalecer seus fundamentos' : suggestedLevel === 'Intermediário' ? '   - Explore os desafios **Intermediário** para expandir suas habilidades' : '   - Desafie-se com os projetos **Avançado** e contribua com a comunidade'}
-   
-2. **💻 Faça seu primeiro fork:**
-   - Você já fez fork do repositório! 🎉
-   - Agora explore os desafios disponíveis e escolha um para começar
-   
-3. **📤 Envie sua primeira entrega:**
-   - Desenvolva sua solução seguindo as instruções do desafio
-   - Crie uma Issue com o template "🚀 Enviar entrega do desafio"
-   - Nosso sistema validará automaticamente sua entrega
-
----
-
-## 🏅 **Sistema de Badges**
-
-Ao completar desafios, você receberá badges exclusivos que podem ser adicionados ao seu perfil:
-
-- 🏅 Badge de Participação
-- ⭐ Badge de Destaque
-- 🎖️ Badges por Tecnologia
-
----
-
-## 🆘 **Precisa de Ajuda?**
-
-- 📖 Leia a documentação completa no [README](../README.md)
-- 💬 Abra uma Issue com suas dúvidas
-- 🤝 Participe das discussões da comunidade
-- 📧 Entre em contato através dos nossos canais
-
----
-
-## 📋 **Informações do Fork**
-
-- **Data do fork:** ${forkCreatedAt}
-- **Link do fork:** ${forkUrl}
-- **Seu perfil:** [@${username}](${profileUrl})
-
----
-
-Estamos ansiosos para ver suas contribuições e seu crescimento! Se tiver qualquer dúvida, não hesite em perguntar nos nossos canais de comunicação.
-
-**Boa sorte e bem-vindo à família HDEV! 💪🚀**
-
----
-
-Atenciosamente,
-
-**A Equipe HDEV**
-
----
-
-_🤖 Este kit de boas-vindas foi gerado automaticamente com base no seu perfil do GitHub._`;
+            let welcomeMessage = '# 🎉 **Kit de Boas-Vindas Dinâmico para a Comunidade HDEV**\n\n';
+            welcomeMessage += `Olá, **${name}**!\n\n`;
+            welcomeMessage += 'Seja muito bem-vindo(a) à comunidade **HDEV | Desenvolvimento de Casa**! Estamos muito felizes em ter você conosco. Nosso objetivo é criar um ambiente de aprendizado, colaboração e crescimento mútuo.\n\n';
+            
+            if (avatar) {
+              welcomeMessage += `![Avatar](${avatar}&s=80)\n\n`;
+            }
+            
+            welcomeMessage += `**Perfil GitHub:** [@${username}](${profileUrl})\n`;
+            if (company) {
+              welcomeMessage += `**Empresa:** ${company}\n`;
+            }
+            if (location) {
+              welcomeMessage += `**Localização:** ${location}\n`;
+            }
+            if (bio) {
+              welcomeMessage += `**Bio:** ${bio}\n`;
+            }
+            if (blog) {
+              welcomeMessage += `**Website:** ${blog}\n`;
+            }
+            
+            welcomeMessage += '\n---\n\n';
+            welcomeMessage += '## 📊 **Seu Perfil no GitHub**\n\n';
+            welcomeMessage += `- 📦 **Repositórios públicos:** ${publicRepos}\n`;
+            welcomeMessage += `- 👥 **Seguidores:** ${followers}\n`;
+            welcomeMessage += `- 👤 **Seguindo:** ${following}\n`;
+            welcomeMessage += `- 📅 **Conta criada há:** ${yearsExperience} ano(s)\n`;
+            welcomeMessage += `- 🎯 **Nível sugerido:** **${suggestedLevel}**\n\n`;
+            welcomeMessage += '---\n\n';
+            welcomeMessage += '## 🚀 **Primeiros Passos Essenciais**\n\n';
+            welcomeMessage += 'Para que você possa se integrar e aproveitar ao máximo tudo o que oferecemos, preparamos um guia rápido com os primeiros passos essenciais:\n\n';
+            welcomeMessage += '---\n\n';
+            welcomeMessage += '### **📝 Passo 1: Atualize seu Perfil no LinkedIn**\n\n';
+            welcomeMessage += 'Mostre a todos que você faz parte da nossa comunidade! Isso aumenta sua visibilidade e fortalece nosso grupo.\n\n';
+            welcomeMessage += '*   **Adicione nosso banner oficial:** Personalize seu perfil com a nossa identidade visual.\n';
+            welcomeMessage += '    *   📥 **Link para baixar o banner da HDEV:** ';
+            if (assetsExists) {
+              welcomeMessage += '[Clique aqui para acessar os assets](https://github.com/HDEV-Desenvolvimento-de-Casa/hdev-hub/tree/main/assets)\n';
+            } else {
+              welcomeMessage += 'Os assets estarão disponíveis em breve na pasta `assets/` do repositório\n';
+            }
+            
+            if (assetsExists && assetsFiles) {
+              welcomeMessage += '    *   **Arquivos disponíveis:**\n';
+              const files = assetsFiles.split(',');
+              files.forEach(file => {
+                welcomeMessage += `        - \`${file}\`\n`;
+              });
+            } else {
+              welcomeMessage += '    *   _Pasta assets será criada em breve com os modelos para LinkedIn_\n';
+            }
+            
+            welcomeMessage += '*   **Adicione a experiência em seu perfil:**\n';
+            welcomeMessage += '    *   **Cargo:** Desenvolvedor Full Stack (Voluntário)\n';
+            welcomeMessage += '    *   **Empresa:** HDEV | Desenvolvimento de Casa\n';
+            welcomeMessage += '    *   **Tipo de emprego:** Autônomo\n';
+            welcomeMessage += '    *   **Localidade:** Remota\n';
+            welcomeMessage += '    *   **Descrição:** Sugerimos que você descreva os projetos em que está trabalhando e as tecnologias que está aprendendo conosco!\n\n';
+            welcomeMessage += '    **💡 Dica:** Baseado no seu perfil GitHub, você pode destacar:\n';
+            
+            if (parseInt(publicRepos) > 0) {
+              welcomeMessage += `    - ${publicRepos} projeto(s) desenvolvido(s)\n`;
+            } else {
+              welcomeMessage += '    - Seus projetos em desenvolvimento\n';
+            }
+            
+            if (parseInt(yearsExperience) > 0) {
+              welcomeMessage += `    - ${yearsExperience} ano(s) de experiência em desenvolvimento\n`;
+            } else {
+              welcomeMessage += '    - Sua jornada de aprendizado\n';
+            }
+            
+            if (suggestedLevel !== 'Iniciante') {
+              welcomeMessage += `    - Nível ${suggestedLevel} de conhecimento técnico\n`;
+            } else {
+              welcomeMessage += '    - Dedicação ao crescimento profissional\n';
+            }
+            
+            welcomeMessage += '\n---\n\n';
+            welcomeMessage += '### **👥 Passo 2: Junte-se à nossa Organização no GitHub**\n\n';
+            welcomeMessage += 'O GitHub é o nosso principal espaço para colaboração em projetos de código aberto.\n\n';
+            welcomeMessage += '*   **Aceite o convite:** Você receberá um convite por e-mail para se juntar à nossa organização "HDEV-Desenvolvimento-de-Casa". Por favor, aceite-o para ter acesso aos nossos repositórios.\n';
+            welcomeMessage += '    *   Se não encontrar o convite, verifique sua caixa de spam ou acesse diretamente a página da organização no GitHub.\n';
+            welcomeMessage += '    *   **Link direto:** [HDEV-Desenvolvimento-de-Casa](https://github.com/HDEV-Desenvolvimento-de-Casa)\n\n';
+            welcomeMessage += '---\n\n';
+            welcomeMessage += '### **🔗 Passo 3: Conecte-se e Participe!**\n\n';
+            welcomeMessage += 'A interação é a chave para o sucesso da comunidade. Siga-nos em nossas redes e participe das discussões.\n\n';
+            welcomeMessage += '*   **Siga nossas redes sociais:**\n';
+            welcomeMessage += '    *   **LinkedIn:** [Page](https://www.linkedin.com/company/hdev-desenvolvimento-de-casa/)\n';
+            welcomeMessage += '    *   **YouTube:** [Canal](https://www.youtube.com/@hdevinfo)\n';
+            welcomeMessage += '*   **Participe do nosso grupo no Whatsapp:**\n';
+            welcomeMessage += '    *   [WhatsApp](https://chat.whatsapp.com/GwcomlxHICV1R74eXruWZX)\n\n';
+            welcomeMessage += '---\n\n';
+            welcomeMessage += '## 🎯 **Próximos Passos Recomendados**\n\n';
+            welcomeMessage += 'Baseado no seu perfil, recomendamos:\n\n';
+            welcomeMessage += '1. **📚 Explore os desafios disponíveis:**\n';
+            
+            if (suggestedLevel === 'Iniciante') {
+              welcomeMessage += '   - Comece pelos desafios **Iniciante** para fortalecer seus fundamentos\n';
+            } else if (suggestedLevel === 'Intermediário') {
+              welcomeMessage += '   - Explore os desafios **Intermediário** para expandir suas habilidades\n';
+            } else {
+              welcomeMessage += '   - Desafie-se com os projetos **Avançado** e contribua com a comunidade\n';
+            }
+            
+            welcomeMessage += '\n2. **💻 Faça seu primeiro fork:**\n';
+            welcomeMessage += '   - Você já fez fork do repositório! 🎉\n';
+            welcomeMessage += '   - Agora explore os desafios disponíveis e escolha um para começar\n\n';
+            welcomeMessage += '3. **📤 Envie sua primeira entrega:**\n';
+            welcomeMessage += '   - Desenvolva sua solução seguindo as instruções do desafio\n';
+            welcomeMessage += '   - Crie uma Issue com o template "🚀 Enviar entrega do desafio"\n';
+            welcomeMessage += '   - Nosso sistema validará automaticamente sua entrega\n\n';
+            welcomeMessage += '---\n\n';
+            welcomeMessage += '## 🏅 **Sistema de Badges**\n\n';
+            welcomeMessage += 'Ao completar desafios, você receberá badges exclusivos que podem ser adicionados ao seu perfil:\n\n';
+            welcomeMessage += '- 🏅 Badge de Participação\n';
+            welcomeMessage += '- ⭐ Badge de Destaque\n';
+            welcomeMessage += '- 🎖️ Badges por Tecnologia\n\n';
+            welcomeMessage += '---\n\n';
+            welcomeMessage += '## 🆘 **Precisa de Ajuda?**\n\n';
+            welcomeMessage += '- 📖 Leia a documentação completa no [README](../README.md)\n';
+            welcomeMessage += '- 💬 Abra uma Issue com suas dúvidas\n';
+            welcomeMessage += '- 🤝 Participe das discussões da comunidade\n';
+            welcomeMessage += '- 📧 Entre em contato através dos nossos canais\n\n';
+            welcomeMessage += '---\n\n';
+            welcomeMessage += '## 📋 **Informações do Fork**\n\n';
+            welcomeMessage += `- **Data do fork:** ${forkCreatedAt}\n`;
+            welcomeMessage += `- **Link do fork:** ${forkUrl}\n`;
+            welcomeMessage += `- **Seu perfil:** [@${username}](${profileUrl})\n\n`;
+            welcomeMessage += '---\n\n';
+            welcomeMessage += 'Estamos ansiosos para ver suas contribuições e seu crescimento! Se tiver qualquer dúvida, não hesite em perguntar nos nossos canais de comunicação.\n\n';
+            welcomeMessage += '**Boa sorte e bem-vindo à família HDEV! 💪🚀**\n\n';
+            welcomeMessage += '---\n\n';
+            welcomeMessage += 'Atenciosamente,\n\n';
+            welcomeMessage += '**A Equipe HDEV**\n\n';
+            welcomeMessage += '---\n\n';
+            welcomeMessage += '_🤖 Este kit de boas-vindas foi gerado automaticamente com base no seu perfil do GitHub._';
 
             // Criar a issue
             await github.rest.issues.create({
