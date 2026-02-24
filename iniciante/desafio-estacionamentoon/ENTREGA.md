@@ -1,4 +1,4 @@
-# 📝 Entrega do Desafio — EstacionamentoOn
+# 📝 Entrega do Desafio — CheckList
 
 **Nome:**  
 **Github:**  

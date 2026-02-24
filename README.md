@@ -1,4 +1,4 @@
-# 🧩 HDEV HUB — Validador de Entregas (POC)
+# 🧩 HDEV HUB — Validador de Entregas - Todos os Desafios!
 
 Este repositório contém a **prova de conceito (POC)** do sistema de validação automática das entregas dos desafios da comunidade HDEV.
 
@@ -21,9 +21,9 @@ hdev-hub/
 │       └── assets/                      # 📂 Arquivos auxiliares
 │           └── modelo-db.sql
 ├── intermediario/
-│   └── (desafios futuros)
+│   └── (mesma estrutura)
 └── avancado/
-    └── (desafios futuros)
+    └── (mesma estrutura)
 ```
 
 ---
@@ -34,14 +34,26 @@ hdev-hub/
 Desafios focados em fundamentos de programação e lógica básica.
 
 **Desafios disponíveis:**
-- ✅ EstacionamentoOn - Sistema de gestão de estacionamento
+- 📖 [CadastroCliente](./iniciante/desafio-cadastrocliente/README.md) - Sabia mais informações
+- 📖 [EstacionamentoOn](./iniciante/desafio-estacionamentoon/README.md) - Sabia mais informações
+- 📖 [ListaTarefas](./iniciante/desafio-listatarefas/README.md) - Sabia mais informações
 
 ### 🟡 Intermediário  
-_(Planejado)_ - Desafios com lógica mais complexa e integração de APIs.
+Desafios com lógica mais complexa e integração de APIs.
+
+**Desafios disponíveis:**
+- 📖 [Cardapio](./intermediario/desafio-cardapio//README.md) - Sabia mais informações
+- 📖 [Estoque](./intermediario/desafio-estoque/README.md) - Sabia mais informações
+- 📖 [OrdemDeServicos](./intermediario/desafio-ordemdeservicos/README.md) - Sabia mais informações
 
 ### 🔴 Avançado  
-_(Planejado)_ - Arquitetura, design patterns e escalabilidade.
+Arquitetura, design patterns e escalabilidade.
 
+**Desafios disponíveis:**
+- 📖 [Aprovacoes](./avancado/desafio-aprovacoes/README.md) - Sabia mais informações
+- 📖 [SistemaFinanceiro](./avancado/desafio-sistemafinanceiro/README.md) - Sabia mais informações
+- 📖 [PainelDigital](./avancado/desafio-paineldigital/README.md) - Sabia mais informações
+- 
 ---
 
 ## 🚀 Como enviar sua entrega

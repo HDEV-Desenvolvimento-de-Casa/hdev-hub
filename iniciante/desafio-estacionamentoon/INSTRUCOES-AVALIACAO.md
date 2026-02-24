@@ -1,4 +1,4 @@
-# ✔️ Instruções de Avaliação — EstacionamentoOn
+# ✔️ Instruções de Avaliação — CheckList
 
 Os projetos devem ser avaliados observando:
 
@@ -7,8 +7,8 @@ Os projetos devem ser avaliados observando:
 ## 🔍 Itens Técnicos
 - Funcionamento ponta a ponta  
 - Banco SQLite local  
-- Regras de permanência e cobrança  
-- Baixa funcionando corretamente  
+- Regras de aplicadas 
+- Telas funcionando corretamente  
 - Interface funcional  
 - Código organizado  
 
