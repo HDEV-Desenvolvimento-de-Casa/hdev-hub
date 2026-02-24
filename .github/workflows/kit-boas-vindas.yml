@@ -1,0 +1,304 @@
+name: 🎁 Kit de Boas-Vindas Dinâmico
+
+on:
+  fork:
+
+jobs:
+  welcome-kit:
+    name: Gerar Kit de Boas-Vindas
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+      pull-requests: read
+    
+    steps:
+      - name: 📥 Checkout do repositório
+        uses: actions/checkout@v4
+      
+      - name: 👤 Obter informações do perfil do GitHub
+        id: user-info
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const forker = context.payload.forkee.owner.login;
+            
+            try {
+              // Obter informações do usuário
+              const { data: user } = await github.rest.users.getByUsername({
+                username: forker
+              });
+              
+              // Obter informações adicionais do perfil
+              const name = user.name || forker;
+              const bio = user.bio || 'Desenvolvedor(a) apaixonado(a) por tecnologia';
+              const avatar = user.avatar_url;
+              const profileUrl = user.html_url;
+              const company = user.company || '';
+              const location = user.location || '';
+              const blog = user.blog || '';
+              const publicRepos = user.public_repos || 0;
+              const followers = user.followers || 0;
+              const following = user.following || 0;
+              const createdAt = user.created_at;
+              
+              // Calcular anos de experiência (aproximado)
+              const accountAge = new Date() - new Date(createdAt);
+              const yearsExperience = Math.floor(accountAge / (1000 * 60 * 60 * 24 * 365));
+              
+              // Determinar nível sugerido baseado em repositórios públicos
+              let suggestedLevel = 'Iniciante';
+              if (publicRepos >= 20) {
+                suggestedLevel = 'Avançado';
+              } else if (publicRepos >= 10) {
+                suggestedLevel = 'Intermediário';
+              }
+              
+              core.setOutput('name', name);
+              core.setOutput('username', forker);
+              core.setOutput('bio', bio);
+              core.setOutput('avatar', avatar);
+              core.setOutput('profileUrl', profileUrl);
+              core.setOutput('company', company);
+              core.setOutput('location', location);
+              core.setOutput('blog', blog);
+              core.setOutput('publicRepos', publicRepos.toString());
+              core.setOutput('followers', followers.toString());
+              core.setOutput('following', following.toString());
+              core.setOutput('yearsExperience', yearsExperience.toString());
+              core.setOutput('suggestedLevel', suggestedLevel);
+              
+              console.log(`✅ Informações obtidas para @${forker}`);
+            } catch (error) {
+              console.log(`⚠️ Erro ao obter informações do usuário: ${error.message}`);
+              // Valores padrão em caso de erro
+              core.setOutput('name', forker);
+              core.setOutput('username', forker);
+              core.setOutput('bio', 'Desenvolvedor(a) apaixonado(a) por tecnologia');
+              core.setOutput('avatar', '');
+              core.setOutput('profileUrl', `https://github.com/${forker}`);
+              core.setOutput('company', '');
+              core.setOutput('location', '');
+              core.setOutput('blog', '');
+              core.setOutput('publicRepos', '0');
+              core.setOutput('followers', '0');
+              core.setOutput('following', '0');
+              core.setOutput('yearsExperience', '0');
+              core.setOutput('suggestedLevel', 'Iniciante');
+            }
+      
+      - name: 📂 Verificar pasta assets
+        id: check-assets
+        run: |
+          if [ -d "assets" ]; then
+            echo "✅ Pasta assets encontrada"
+            echo "exists=true" >> $GITHUB_OUTPUT
+            
+            # Listar arquivos na pasta assets
+            if [ "$(ls -A assets 2>/dev/null)" ]; then
+              echo "files=$(ls assets | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
+            else
+              echo "files=" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "⚠️ Pasta assets não encontrada"
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "files=" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: 🎁 Criar Issue de Kit de Boas-Vindas
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const forker = context.payload.forkee.owner.login;
+            const forkUrl = context.payload.forkee.html_url;
+            const forkCreatedAt = new Date(context.payload.forkee.created_at).toLocaleDateString('pt-BR');
+            
+            // Obter informações do step anterior
+            const name = '${{ steps.user-info.outputs.name }}';
+            const username = '${{ steps.user-info.outputs.username }}';
+            const bio = '${{ steps.user-info.outputs.bio }}';
+            const avatar = '${{ steps.user-info.outputs.avatar }}';
+            const profileUrl = '${{ steps.user-info.outputs.profileUrl }}';
+            const company = '${{ steps.user-info.outputs.company }}';
+            const location = '${{ steps.user-info.outputs.location }}';
+            const blog = '${{ steps.user-info.outputs.blog }}';
+            const publicRepos = '${{ steps.user-info.outputs.publicRepos }}';
+            const followers = '${{ steps.user-info.outputs.followers }}';
+            const following = '${{ steps.user-info.outputs.following }}';
+            const yearsExperience = '${{ steps.user-info.outputs.yearsExperience }}';
+            const suggestedLevel = '${{ steps.user-info.outputs.suggestedLevel }}';
+            const assetsExists = '${{ steps.check-assets.outputs.exists }}' === 'true';
+            const assetsFiles = '${{ steps.check-assets.outputs.files }}';
+            
+            // Construir mensagem de boas-vindas personalizada
+            let welcomeMessage = `# 🎉 **Kit de Boas-Vindas Dinâmico para a Comunidade HDEV**
+
+Olá, **${name}**!
+
+Seja muito bem-vindo(a) à comunidade **HDEV | Desenvolvimento de Casa**! Estamos muito felizes em ter você conosco. Nosso objetivo é criar um ambiente de aprendizado, colaboração e crescimento mútuo.
+
+${avatar ? `![Avatar](${avatar}&s=80)` : ''}
+
+**Perfil GitHub:** [@${username}](${profileUrl})  
+${company ? `**Empresa:** ${company}` : ''}  
+${location ? `**Localização:** ${location}` : ''}  
+${bio ? `**Bio:** ${bio}` : ''}  
+${blog ? `**Website:** ${blog}` : ''}
+
+---
+
+## 📊 **Seu Perfil no GitHub**
+
+- 📦 **Repositórios públicos:** ${publicRepos}
+- 👥 **Seguidores:** ${followers}
+- 👤 **Seguindo:** ${following}
+- 📅 **Conta criada há:** ${yearsExperience} ano(s)
+- 🎯 **Nível sugerido:** **${suggestedLevel}**
+
+---
+
+## 🚀 **Primeiros Passos Essenciais**
+
+Para que você possa se integrar e aproveitar ao máximo tudo o que oferecemos, preparamos um guia rápido com os primeiros passos essenciais:
+
+---
+
+### **📝 Passo 1: Atualize seu Perfil no LinkedIn**
+
+Mostre a todos que você faz parte da nossa comunidade! Isso aumenta sua visibilidade e fortalece nosso grupo.
+
+*   **Adicione nosso banner oficial:** Personalize seu perfil com a nossa identidade visual.
+    *   📥 **Link para baixar o banner da HDEV:** ${assetsExists ? '[Clique aqui para acessar os assets](https://github.com/HDEV-Desenvolvimento-de-Casa/hdev-hub/tree/main/assets)' : 'Os assets estarão disponíveis em breve na pasta `assets/` do repositório'}
+    ${assetsExists && assetsFiles ? `\n    *   **Arquivos disponíveis:**\n${assetsFiles.split(',').map(file => `        - \`${file}\``).join('\n')}` : '    *   _Pasta assets será criada em breve com os modelos para LinkedIn_'}
+*   **Adicione a experiência em seu perfil:**
+    *   **Cargo:** Desenvolvedor Full Stack (Voluntário)
+    *   **Empresa:** HDEV | Desenvolvimento de Casa
+    *   **Tipo de emprego:** Autônomo
+    *   **Localidade:** Remota
+    *   **Descrição:** Sugerimos que você descreva os projetos em que está trabalhando e as tecnologias que está aprendendo conosco!
+    
+    **💡 Dica:** Baseado no seu perfil GitHub, você pode destacar:
+    ${publicRepos > 0 ? `    - ${publicRepos} projeto(s) desenvolvido(s)` : '    - Seus projetos em desenvolvimento'}
+    ${yearsExperience > 0 ? `    - ${yearsExperience} ano(s) de experiência em desenvolvimento` : '    - Sua jornada de aprendizado'}
+    ${suggestedLevel !== 'Iniciante' ? `    - Nível ${suggestedLevel} de conhecimento técnico` : '    - Dedicação ao crescimento profissional'}
+
+---
+
+### **👥 Passo 2: Junte-se à nossa Organização no GitHub**
+
+O GitHub é o nosso principal espaço para colaboração em projetos de código aberto.
+
+*   **Aceite o convite:** Você receberá um convite por e-mail para se juntar à nossa organização "HDEV-Desenvolvimento-de-Casa". Por favor, aceite-o para ter acesso aos nossos repositórios.
+    *   Se não encontrar o convite, verifique sua caixa de spam ou acesse diretamente a página da organização no GitHub.
+    *   **Link direto:** [HDEV-Desenvolvimento-de-Casa](https://github.com/HDEV-Desenvolvimento-de-Casa)
+
+---
+
+### **🔗 Passo 3: Conecte-se e Participe!**
+
+A interação é a chave para o sucesso da comunidade. Siga-nos em nossas redes e participe das discussões.
+
+*   **Siga nossas redes sociais:**
+    *   **LinkedIn:** [Page](https://www.linkedin.com/company/hdev-desenvolvimento-de-casa/)
+    *   **YouTube:** [Canal](https://www.youtube.com/@hdevinfo)
+*   **Participe do nosso grupo no Whatsapp:**
+    *   [WhatsApp](https://chat.whatsapp.com/GwcomlxHICV1R74eXruWZX)
+
+---
+
+## 🎯 **Próximos Passos Recomendados**
+
+Baseado no seu perfil, recomendamos:
+
+1. **📚 Explore os desafios disponíveis:**
+   ${suggestedLevel === 'Iniciante' ? '   - Comece pelos desafios **Iniciante** para fortalecer seus fundamentos' : suggestedLevel === 'Intermediário' ? '   - Explore os desafios **Intermediário** para expandir suas habilidades' : '   - Desafie-se com os projetos **Avançado** e contribua com a comunidade'}
+   
+2. **💻 Faça seu primeiro fork:**
+   - Você já fez fork do repositório! 🎉
+   - Agora explore os desafios disponíveis e escolha um para começar
+   
+3. **📤 Envie sua primeira entrega:**
+   - Desenvolva sua solução seguindo as instruções do desafio
+   - Crie uma Issue com o template "🚀 Enviar entrega do desafio"
+   - Nosso sistema validará automaticamente sua entrega
+
+---
+
+## 🏅 **Sistema de Badges**
+
+Ao completar desafios, você receberá badges exclusivos que podem ser adicionados ao seu perfil:
+
+- 🏅 Badge de Participação
+- ⭐ Badge de Destaque
+- 🎖️ Badges por Tecnologia
+
+---
+
+## 🆘 **Precisa de Ajuda?**
+
+- 📖 Leia a documentação completa no [README](../README.md)
+- 💬 Abra uma Issue com suas dúvidas
+- 🤝 Participe das discussões da comunidade
+- 📧 Entre em contato através dos nossos canais
+
+---
+
+## 📋 **Informações do Fork**
+
+- **Data do fork:** ${forkCreatedAt}
+- **Link do fork:** ${forkUrl}
+- **Seu perfil:** [@${username}](${profileUrl})
+
+---
+
+Estamos ansiosos para ver suas contribuições e seu crescimento! Se tiver qualquer dúvida, não hesite em perguntar nos nossos canais de comunicação.
+
+**Boa sorte e bem-vindo à família HDEV! 💪🚀**
+
+---
+
+Atenciosamente,
+
+**A Equipe HDEV**
+
+---
+
+_🤖 Este kit de boas-vindas foi gerado automaticamente com base no seu perfil do GitHub._`;
+
+            // Criar a issue
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🎁 Kit de Boas-Vindas para ${name} (@${username})`,
+              body: welcomeMessage,
+              labels: ['boas-vindas', 'kit-dinâmico', 'novo-membro']
+            });
+            
+            console.log(`✅ Kit de boas-vindas criado para @${username}`);
+      
+      - name: 📊 Registrar fork em arquivo de participantes
+        run: |
+          mkdir -p participantes
+          FORKER="${{ steps.user-info.outputs.username }}"
+          FORKER_NAME="${{ steps.user-info.outputs.name }}"
+          FORK_URL="${{ github.event.forkee.html_url }}"
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          # Adicionar ao arquivo de forks
+          echo "- **@${FORKER}** (${FORKER_NAME}) - [Fork](${FORK_URL}) - ${TIMESTAMP}" >> participantes/forks.md
+          
+          echo "✅ Participante ${FORKER} registrado"
+      
+      - name: 💾 Commit do registro
+        continue-on-error: true
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "HDEV Bot"
+          git add participantes/forks.md
+          git commit -m "🎁 Novo membro: ${{ steps.user-info.outputs.name }} (@${{ steps.user-info.outputs.username }})"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
