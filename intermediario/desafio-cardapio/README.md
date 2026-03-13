@@ -1,4 +1,4 @@
-# 🍕 Desafio Fullstack Intermediário: Cardápio Digital QR Code (MenuZap)
+# 🍕 Desafio Fullstack Intermediário: Cardápio Digital QR Code (E-Cardápio)
 
 > **Acabe com os custos de impressão e menus desatualizados. Crie uma plataforma onde o restaurante gerencia o que o cliente vê em tempo real.**
 
@@ -8,7 +8,7 @@ Restaurantes, lanchonetes e bares sofrem toda vez que um ingrediente sobe de pre
 
 ## 💡 A Solução
 
-Você desenvolverá o **MenuZap**, um sistema composto por duas partes:
+Você desenvolverá o **E-Cardápio**, um sistema composto por duas partes:
 
 1. **Visão do Cliente:** Uma página web elegante, rápida e otimizada para mobile que lista os produtos por categoria.
 2. **Painel do Lojista:** Área restrita para cadastrar produtos, alterar preços e "pausar" itens que acabaram no dia.
@@ -96,3 +96,6 @@ Siga os passos oficiais para validação:
 * **CSS:** Foque no "App-like feel" (parecer um aplicativo nativo no telemóvel).
 
 **O mercado de alimentação não para. Construa hoje a solução que o restaurante do seu bairro precisa!** 🚀
+
+> Nosso projeto vinculado á HDEV tem caráter exclusivamente acadêmico, sem fins comerciais ou de exploração da marca registrada por alguma empresa.
+
