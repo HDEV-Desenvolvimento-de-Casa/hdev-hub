@@ -97,5 +97,6 @@ Siga os passos oficiais para validação:
 
 **O mercado de alimentação não para. Construa hoje a solução que o restaurante do seu bairro precisa!** 🚀
 
-> Nosso projeto vinculado á HDEV tem caráter exclusivamente acadêmico, sem fins comerciais ou de exploração da marca registrada por alguma empresa.
+> Nosso projeto vinculado á HDEV tem caráter exclusivamente acadêmico, sem fins comerciais ou de exploração da marca registrada por nenhuma empresa.
+
 
